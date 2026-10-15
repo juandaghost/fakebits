@@ -1,0 +1,10 @@
+{
+  "extName": {
+    "message": "FakeBits",
+    "description": "Extension name. Must not contain Twitch marks."
+  },
+  "extDescription": {
+    "message": "Fake Twitch bits wallet to kill the urge to donate. Simulation only. Not affiliated with Twitch. No real money.",
+    "description": "Store summary, at most 132 characters."
+  }
+}

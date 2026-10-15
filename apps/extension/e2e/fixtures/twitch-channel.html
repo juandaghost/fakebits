@@ -1,0 +1,128 @@
+<!doctype html>
+<!--
+  Stand-in for a twitch.tv channel page, served by Playwright in place of the real site.
+  It reproduces only what src/twitch/twitchDom.ts looks for, and the SPA behaviour that
+  matters: the chat mounts late, and channel navigation swaps the chat without a reload.
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Fixture channel</title>
+    <style>
+      /* Twitch shrinks the root font size; the on-page UI must not care. */
+      html {
+        font-size: 62.5%;
+      }
+      body {
+        margin: 0;
+        font: 1.3rem/1.5 sans-serif;
+        background: #0e0e10;
+        color: #efeff1;
+        display: flex;
+      }
+      main {
+        flex: 1;
+        padding: 2rem;
+      }
+      /* Twitch layers extension iframes over the player with a high z-index. The modal
+         must still end up on top and receive clicks. */
+      .player {
+        position: relative;
+        height: 60vh;
+        margin-top: 1rem;
+        background: #18181b;
+      }
+      .player-overlay {
+        position: absolute;
+        inset: 0;
+        z-index: 5000;
+      }
+      aside {
+        width: 340px;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        border-left: 1px solid #333;
+      }
+      .chat-scrollable-area__message-container {
+        flex: 1;
+        overflow-y: auto;
+        padding: 1rem 0;
+      }
+      .chat-line__message {
+        padding: 0.5rem 2rem;
+      }
+      .chat-input {
+        padding: 1rem;
+      }
+      .chat-input__buttons-container {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="channel-info-content">
+        <img class="tw-image-avatar" id="avatar" alt="" src="" width="50" height="50" />
+        <h1 class="tw-title" id="display-name"></h1>
+      </div>
+      <a href="/otherstreamer" id="go-other">Go to OtherStreamer</a>
+      <a href="/directory" id="go-directory">Browse</a>
+      <div class="player"><div class="player-overlay"></div></div>
+    </main>
+    <aside id="chat-column"></aside>
+
+    <script>
+      const DISPLAY_NAMES = { fixturestreamer: 'FixtureStreamer', otherstreamer: 'OtherStreamer' };
+      window.__realChatTouched = false;
+
+      function renderChat(channel) {
+        const column = document.getElementById('chat-column');
+        column.replaceChildren();
+        if (!DISPLAY_NAMES[channel]) return;
+        const section = document.createElement('section');
+        section.style.cssText = 'display:flex;flex-direction:column;height:100%';
+        section.innerHTML = `
+          <div class="chat-scrollable-area__message-container" data-test-selector="chat-scrollable-area__message-container">
+            <div class="chat-line__message">viewer1: hi ${channel}</div>
+            <div class="chat-line__message">viewer2: hello</div>
+          </div>
+          <div class="chat-input">
+            <textarea data-a-target="chat-input" placeholder="Send a message"></textarea>
+            <div class="chat-input__buttons-container" data-test-selector="chat-input-buttons-container">
+              <button data-a-target="chat-send-button">Chat</button>
+            </div>
+          </div>`;
+        const input = section.querySelector('[data-a-target="chat-input"]');
+        input.addEventListener('input', () => (window.__realChatTouched = true));
+        section
+          .querySelector('[data-a-target="chat-send-button"]')
+          .addEventListener('click', () => (window.__realChatTouched = true));
+        column.append(section);
+      }
+
+      function render() {
+        const channel = location.pathname.split('/')[1].toLowerCase();
+        const name = DISPLAY_NAMES[channel] || '';
+        document.getElementById('display-name').textContent = name;
+        const avatar = document.getElementById('avatar');
+        avatar.alt = name;
+        avatar.src = name ? '/fixture-avatar.svg' : '';
+        document.getElementById('chat-column').replaceChildren();
+        // Twitch's chat shows up well after the page; the content script must wait for it.
+        setTimeout(() => renderChat(channel), 400);
+      }
+
+      for (const link of document.querySelectorAll('main a')) {
+        link.addEventListener('click', (event) => {
+          event.preventDefault();
+          history.pushState(null, '', link.getAttribute('href'));
+          render();
+        });
+      }
+      render();
+    </script>
+  </body>
+</html>

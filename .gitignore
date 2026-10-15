@@ -1,0 +1,15 @@
+node_modules/
+dist/
+.output/
+.wxt/
+coverage/
+*.log
+.DS_Store
+Thumbs.db
+.env
+.env.*
+stats.html
+# machine-specific browser path for `pnpm dev`, see README
+web-ext.config.ts
+test-results/
+playwright-report/

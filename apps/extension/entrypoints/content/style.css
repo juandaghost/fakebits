@@ -1,0 +1,25 @@
+/* Scan only our own sources, so the CSS is the same on any machine (AMO rebuilds it). */
+@import 'tailwindcss' source(none);
+@source '../../src';
+@source '../../entrypoints';
+@import '../../src/ui/animations.css';
+
+/*
+ * WXT resets the shadow host with `all: initial`, so fonts are set on our own root
+ * element instead of :host. Rem units are rewritten to px at build time (see
+ * wxt.config.ts) because Twitch changes the page's root font size.
+ */
+.fb-root {
+  color-scheme: dark;
+  font-family:
+    Inter,
+    system-ui,
+    Segoe UI,
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}

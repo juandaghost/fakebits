@@ -1,0 +1,23 @@
+/* Scan only our own sources, so the CSS is the same on any machine (AMO rebuilds it). */
+@import 'tailwindcss' source(none);
+@source '../../src';
+@source '../../entrypoints';
+@import '../../src/ui/animations.css';
+
+:root {
+  color-scheme: dark;
+  font-family:
+    Inter,
+    system-ui,
+    Segoe UI,
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  margin: 0;
+  background: #09090b;
+}

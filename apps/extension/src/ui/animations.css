@@ -1,0 +1,50 @@
+/* Animations shared by the popup and the on-page UI. */
+
+@keyframes fb-pop {
+  0% {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes fb-burst {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(0.3);
+    opacity: 0;
+  }
+}
+
+.fb-pop {
+  animation: fb-pop 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.4) both;
+}
+
+.fb-particle {
+  position: absolute;
+  left: 50%;
+  top: 48px;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  animation: fb-burst 0.9s ease-out forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fb-pop,
+  .fb-particle {
+    animation: none;
+  }
+  .fb-particle {
+    display: none;
+  }
+}

@@ -1,0 +1,3 @@
+# Keep LF everywhere (Prettier checks for it), whatever core.autocrlf says.
+* text=auto eol=lf
+*.png binary

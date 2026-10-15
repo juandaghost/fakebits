@@ -1,0 +1,34 @@
+{
+  "name": "@fakebits/extension",
+  "description": "FakeBits: a fake Twitch bits wallet to kill the urge to donate. Simulation only. Not affiliated with Twitch. No real money.",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "wxt",
+    "dev:firefox": "wxt -b firefox",
+    "build": "wxt build",
+    "build:firefox": "wxt build -b firefox",
+    "zip": "wxt zip",
+    "zip:firefox": "wxt zip -b firefox",
+    "typecheck": "wxt prepare && tsc --noEmit",
+    "postinstall": "wxt prepare",
+    "e2e": "wxt build && playwright test",
+    "lint:firefox": "wxt build -b firefox && web-ext lint --source-dir .output/firefox-mv2"
+  },
+  "dependencies": {
+    "@fakebits/core": "workspace:*",
+    "preact": "^10.27.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.64.0",
+    "@preact/preset-vite": "^2.10.2",
+    "@tailwindcss/vite": "^4.1.13",
+    "tailwindcss": "^4.1.13",
+    "typescript": "^5.9.3",
+    "vite": "^8.1.5",
+    "web-ext": "^10.5.0",
+    "wxt": "^0.21.3"
+  },
+  "license": "MIT"
+}
